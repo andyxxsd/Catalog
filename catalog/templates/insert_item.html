@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1 class="text-center">Insert new item</h1>
+<form action="/item" method="post">
+	{% for attr in item.attr %}
+		<label for="{{ attr }}">{{ attr }}</label>
+		<input id="{{ attr }}" type="text">
+	{% endfor %}
+</form>
+{% endblock %}

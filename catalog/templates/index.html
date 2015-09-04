@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+{% from "display_macro.html" import render_items %}
+{% block body %}
+<h1 class="text-center">Latest Update items</h1>
+{{ render_items(items) }}
+{% endblock %}

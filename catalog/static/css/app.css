@@ -1,0 +1,46 @@
+* {
+	font-family: "consolas", sans-serif;
+}
+
+.row-gap-huge {
+	margin-top: 60px;
+}
+
+.row {
+	margin-left: -15px;
+	margin-right: -15px;
+}
+
+.navbar-brand {
+	color: white;
+}
+
+.navbar-colored {
+	color: white;
+	background-color: darkslateblue;
+}
+
+#signinButton {
+	margin-top: 10px;
+	/*background-image: url("/static/image/btn-signin.png");*/
+	/*background-position: -326px -696px;*/
+}
+
+#display-email {
+	float: right;
+	line-height: 50px;
+}
+
+#logoutButton {
+	cursor: pointer;
+	float: right;
+	margin: 10px 20px 0 20px;
+	width: 98px;
+	height: 34px;
+	border-radius: 5px;
+	border: 1px solid black;
+	background-color: white;
+	color: black;
+	text-align: center;
+	line-height: 34px;
+}

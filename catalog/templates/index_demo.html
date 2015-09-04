@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{  config.TITLE }}</title>
+	<link href="static/lib/bootstrap-css/css/bootstrap.css" rel="stylesheet">
+	<link href="static/css/app.css" rel="stylesheet">
+</head>
+<body>
+
+	<nav class="navbar navbar-fixed-top navbar-colored" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">{{  config.TITLE }}</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<ul class="nav navbar-nav">
+
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container -->
+	</nav>
+	<div class="row row-gap-huge"></div>
+	<div class="container" ng-view>
+		<div class="left container col-md-3">
+			<h4 class="text-center">Catelog of Chinese Food</h4>
+			<div class="list-group">
+				<a href="" class="list-group-item">
+					<span class="badge">15</span>
+					Sichuan Dish
+				</a>
+				<a href="" class="list-group-item">
+					<span class="badge">15</span>
+					Fujian Dish
+				</a>
+				<a href="" class="list-group-item">
+					<span class="badge">15</span>
+					Guangdong Dish
+				</a>
+				<a href="" class="list-group-item">
+					<span class="badge">15</span>
+					Zhejiang Dish
+				</a>
+				<a href="" class="list-group-item">
+					<span class="badge">15</span>
+					Beijing Dish
+				</a>
+			</div>
+		</div>
+		<div class="col-xs-1"></div>
+		<div class="right container col-md-8">
+			<h1 class="text-center">Latest Update items</h1>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Catelog</th>
+						<th>Update Time</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>3</td>
+						<td>Kong Bao Chicken</td>
+						<td>Sichuan Food</td>
+						<td>2015-7-7</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Hot pot</td>
+						<td>Sichuan Food</td>
+						<td>2015-7-6</td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>Iphone 6 plus</td>
+						<td>Sichuan Food</td>
+						<td>2015-7-5</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="footer text-center ">
+		<div class="row row-gap-huge"></div>
+		<small class="text-info">&copy;Skylar Zheng | Email: <a href="mailto: andyxxsd@gmail.com">andyxxsd@gmail.com</a></small>
+		<div class="row row-gap-huge"></div>
+	</div>
+
+	<script src="static/lib/jquery/dist/jquery.js"></script>
+</body>
+</html>
