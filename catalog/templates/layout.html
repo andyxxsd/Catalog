@@ -54,8 +54,11 @@
 						</span>
 					</div></li>
 					<li>
-						<div id="logoutButton">Log Out</div>
-						<div id="display-email">{{ session.email }}</div>
+						<div id="user-info">
+							<div id="logoutButton">Log Out</div>
+							<div id="display-email">{{ session.email }}</div>
+							<img id='avatar' src='{{ session.picture }}'>
+						</div>
 					</li>
 				</ul>
 			</div>
@@ -108,7 +111,7 @@
 			{% if session.email %}
 			$('#signinButton').hide();
 			{% else %}
-			$('#signinButton').show();$('#display-email').hide();$("#logoutButton").hide();
+			$('#signinButton').show();$('#user-info').hide();
 			{% endif %}
 
 			$("#logoutButton").click(function(e){
@@ -119,8 +122,7 @@
 					success: function(result) {
 						console.log(result);
 						$('#signinButton').show();
-						$('#display-email').hide();
-						$('#logoutButton').hide();
+						$('#user-info').hide();
 						console.log('Successfully log out!');
 						location.reload();						
 					}
@@ -141,21 +143,17 @@
 			console.log(authResult)
 			if (authResult['code']) {
 				$('#signinButton').hide();
-				var formData = FormData();
-				formData.append("_csrf_token", "{{ csrf_token() }}");
-				formData.append("code", authResult['code'])
 				$.ajax({
 					type: 'POST',
-					url: '/gconnect',
+					url: '/gconnect?_csrf_token={{ csrf_token() }}',
 					processData: false,
 					contentType: 'application/octet-stream; charset=utf-8',
-					data: formData,
+					data: authResult['code'],
 					success: function(result) {
 						if (result) {
 							console.log('Login successfully!');
 							console.log(result);
-							$('#display-email').show()
-							$('#logoutButton').show()
+							$('#user-info').show();
 							$('#display-email').html(result)
 							location.reload();
 						} else if (authResult['error']) {

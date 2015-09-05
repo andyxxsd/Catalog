@@ -23,8 +23,8 @@ view = Blueprint('view', __name__)
 
 @view.context_processor
 def get_catalogs():
-	login_session['uid'] = 1
-	login_session['email'] = '233@B.com'
+	# login_session['uid'] = 1
+	# login_session['email'] = '233@B.com'
 	return dict(catalogs=models.select_catalogs())
 
 @view.route("/catalogs/<catalog>")

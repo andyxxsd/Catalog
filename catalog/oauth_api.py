@@ -21,7 +21,7 @@ oauth_api = Blueprint('oauth_api', __name__)
 
 @oauth_api.route("/gconnect", methods=['POST'])
 def gconnect():
-	code = request.form.get('code')
+	code = request.data
 
 	try:
 		oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
