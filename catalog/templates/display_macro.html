@@ -10,7 +10,7 @@
 	</thead>
 	<tbody>
 		{% for item in items %}
-		<tr>
+		<tr class='clickable-row' data-href='/items/{{ item.id }}'>
 			<td>{{ item.id }}</td>
 			<td>{{ item.name }}</td>
 			<td>{{ item.catalog }}</td>

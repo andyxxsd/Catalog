@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% from "display_macro.html" import render_items %}
+{% block body %}
+<h1 class="text-center">{{ item.name }}</h1>
+<p class="text-info text-center">Updated Time: {{ item.updated_time }}</p>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Description</h3>
+  </div>
+  <div class="panel-body">{{ item.description }}</div>
+</div>
+{% if session.email %}
+<a href="/items/{{ item.id }}/del" type='button' class="btn btn-default">DEL ITEM</a>
+{% endif %}
+{% endblock %}

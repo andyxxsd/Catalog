@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1 class="text-center">New item for {{ catalog }}</h1>
+<form action="/catalogs/{{ catalog }}/new" method="post" autocomplete='off'>
+	<div class="form-group">
+		<label for="input-name">Item Name</label>
+		<input type="text" class="form-control" id="input-name" name="name" placeholder="NAME etc. Spicy Toufu">
+	</div>
+	<div class="form-group">
+		<label for="input-description">Item Description</label>
+		<textarea class="form-control" rows="3" id='input-description' name="description" placeholder="Made by toufu and taste gooood"></textarea>
+	</div>
+	<button type="submit" class="btn btn-default">Submit</button>
+</form>
+{% endblock %}

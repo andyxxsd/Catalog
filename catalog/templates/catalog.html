@@ -3,4 +3,8 @@
 {% block body %}
 <h1 class="text-center">{{ catalog }} items ({{ items|length }} in total).</h1>
 {{ render_items(items) }}
+{% if session.email %}
+<a href="/catalogs/{{ catalog }}/new" type='button' class="btn btn-default">CREATE ITEM</a>
+<a href="/catalogs/{{ catalog }}/del" type='button' class="btn btn-default">DEL CATALOG</a>
+{% endif %}
 {% endblock %}

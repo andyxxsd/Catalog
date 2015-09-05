@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1 class="text-center">New catalog for Chinese food</h1>
+<form action="/catalogs/new" method="post" autocomplete='off'>
+	<div class="form-group">
+		<label for="input-name">Catalog Name</label>
+		<input type="text" class="form-control" id="input-name" name="name" placeholder="NAME etc. Min Food">
+	</div>
+	<button type="submit" class="btn btn-default">Submit</button>
+</form>
+{% endblock %}

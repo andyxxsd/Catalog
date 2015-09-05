@@ -9,6 +9,30 @@
 	<link href="/static/css/app.css" rel="stylesheet">
 </head>
 <body>
+	<!-- Button trigger modal -->
+	<button id='modal-trigger' type='button' class="btn btn-primary btn-lg" data-toggle="modal" data-target="#flashes-display-modal"></button>
+
+	<!-- Modal -->
+	<div class="modal fade" id="flashes-display-modal" tabindex="-1" role="dialog" aria-labelledby="flashes-display-modal-title">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="flashes-display-modal-title">Attention Please</h4>
+				</div>
+				<div class="modal-body">
+					{% with messages = get_flashed_messages() %}
+					{% if messages %}
+					{% for message in messages %}
+					<p>{{ message }}</p>
+					{% endfor %}
+					{% endif %}
+					{% endwith %}
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<nav class="navbar navbar-fixed-top navbar-colored" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
@@ -50,6 +74,12 @@
 					{{ catalog.name }}
 				</a>
 				{% endfor %}
+				{% if session.email %}
+				<a href="/catalogs/new" class="list-group-item">
+					<span class="badge">&plus;</span>
+					ADD CATALOG
+				</a>
+				{% endif %}
 			</div>
 		</div>
 		<div class="col-xs-1"></div>
@@ -65,10 +95,16 @@
 	</div>
 
 	<script src="/static/lib/jquery/dist/jquery.js"></script>
+	<script src="/static/lib/bootstrap-css/js/bootstrap.min.js"></script>
 	<script src="/static/js/app.js"></script>
 	<script src="https://apis.google.com/js/client.js?onload=start" async defer></script>
 	<script type="text/javascript">
 		$(function(){
+			{% if get_flashed_messages() %}
+			$('#modal-trigger').click();
+			setTimeout(function(){$('.modal .close').click();}, 3000)
+			{% endif %}
+
 			{% if session.email %}
 			$('#signinButton').hide();
 			{% else %}
@@ -86,8 +122,13 @@
 						$('#display-email').hide();
 						$('#logoutButton').hide();
 						console.log('Successfully log out!');
+						location.reload();						
 					}
 				})
+			});
+
+			$(".clickable-row").click(function() {
+				window.document.location = $(this).data("href");
 			});
 		});
 
@@ -110,10 +151,10 @@
 						if (result) {
 							console.log('Login successfully!');
 							console.log(result);
-							// setTimeOut(function(){window.location.href="/";}, 4000);
 							$('#display-email').show()
 							$('#logoutButton').show()
 							$('#display-email').html(result)
+							location.reload();
 						} else if (authResult['error']) {
 							console.log("Error: " + authResult['error']);
 						} else {

@@ -25,14 +25,14 @@ def test():
 	insert_catalog("Guangdong Dish")
 	insert_catalog("Zhejiang Dish")
 	insert_catalog("Beijing Dish")
-	insert_item("Iphone 6 plus", c["id"])
-	insert_item("Hot pot", c["id"])
-	insert_item("Kong Bao Chicken", c["id"])
+	insert_item("Iphone 6 plus", c["id"], 'Is a phone')
+	insert_item("Hot pot", c["id"], "Hot hot hot")
+	insert_item("Kong Bao Chicken", c["id"], "Classic")
 
-def insert_item(name, cid):
+def insert_item(name, cid, description):
 	try:
 		conn, cur = connect()
-		cur.execute("INSERT INTO items (name, cid, created_time, updated_time) VALUES(%s, %s, now(), now()) RETURNING *", (name, cid,))
+		cur.execute("INSERT INTO items (name, cid, description, created_time, updated_time) VALUES(%s, %s, %s, now(), now()) RETURNING *", (name, cid, description,))
 		conn.commit()
 		return (lambda row: dict(id=row[0], name=row[1], catalog=row[2], updated_time=row[3]))(cur.fetchall())
 	except:
@@ -60,13 +60,23 @@ def select_catalogs(offset, limit):
 	except:
 		traceback.print_exc()
 
+def select_item_by_id(id):
+	try:
+		conn, cur = connect()
+		cur.execute("""SELECT id, name, description, updated_time
+			FROM items
+			WHERE items.id = %s
+		""", (id,))
+		return (lambda row: dict(id=row[0], name=row[1], description=row[2], updated_time=row[3]))(cur.fetchone())
+	except:
+		traceback.print_exc()
+
 def select_items_by_cid(cid, offset, limit):
 	try:
 		conn, cur = connect()
 		cur.execute("""SELECT items.id, items.name, catalogs.name, items.updated_time
 			FROM items, catalogs
 			WHERE catalogs.id = %s AND items.cid = catalogs.id
-			ORDER BY updated_time
 			LIMIT %s OFFSET %s
 		""", (cid, limit, offset,))
 		res = [dict(id=row[0], name=row[1], catalog=row[2], updated_time=row[3]) for row in cur.fetchall()]
@@ -79,8 +89,7 @@ def select_cid_by_name(name):
 		conn, cur = connect()
 		cur.execute("""SELECT catalogs.id 
 			FROM catalogs 
-			WHERE catalogs.name = %s 
-			LIMIT 1 OFFSET 0
+			WHERE catalogs.name = %s
 		""", (name,))
 		cid = cur.fetchone()
 		return None if len(cid) != 1 else cid[0]
@@ -100,4 +109,34 @@ def select_latest_items(offset, limit):
 		return [] if len(res) == 0 else res
 	except:
 		traceback.print_exc()
+
+def delete_catalog(cid):
+	try:
+		conn, cur = connect()
+		cur.execute("""DELETE FROM catalogs
+			WHERE catalogs.id = %s
+		""", (cid,))
+		conn.commit()
+	except:
+		traceback.print_exc()
+
+def delete_item(id):
+	try:
+		conn, cur = connect()
+		cur.execute("""DELETE FROM items
+			WHERE items.id = %s
+		""", (id,))
+		conn.commit()
+	except:
+		traceback.print_exc()
+
+
+
+
+
+
+
+
+
+
 
