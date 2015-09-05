@@ -20,7 +20,7 @@
 
 ##Testing
 
-	1. Request the /add_data api, it will automaticlly generate some data
+	Request the /add_data api, it will automaticlly generate some data
 
 ##Cleanning
 
