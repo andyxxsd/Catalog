@@ -1,6 +1,6 @@
 ##Enviroment
 
-	python2 ONLY, flask, sqlalchemy
+	python2 ONLY, flask, sqlalchemy, requests
 
 ##Requirement
 
@@ -14,7 +14,7 @@
 	1. Install python2 (https://www.python.org/downloads/)
 	2. Install flask & sqlalchemy
 
-		pip install flask, sqlalchemy
+		pip install flask, sqlalchemy, requests
 
 	3. Run applicant.py to start the server
 
