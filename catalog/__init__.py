@@ -1,5 +1,6 @@
 from flask import Flask, Blueprint, Response, request, abort, render_template, make_response, flash, redirect, url_for
 from flask import session as login_session
+from werkzeug import secure_filename
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from functools import wraps
@@ -22,7 +23,7 @@ from catalog import models
 from catalog.models.database_setup import Catalog, Base, Item
 
 app = Flask(__name__)
-app.secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+app.secret_key = utils.random_string()
 app.config.from_pyfile("config.py")
 
 @app.before_request
@@ -37,7 +38,7 @@ def csrf_protect():
 
 def generate_csrf_token():
 	if '_csrf_token' not in login_session:
-		login_session['_csrf_token'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+		login_session['_csrf_token'] = utils.random_string()
 	return login_session['_csrf_token']
 
 app.jinja_env.globals['csrf_token'] = generate_csrf_token	

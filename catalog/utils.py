@@ -4,6 +4,7 @@ from functools import wraps
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import Element
 import json
+import random, string
 
 def json_response(message, status_code):
 	resp = make_response(json.dumps(message), status_code)
@@ -43,3 +44,6 @@ def require_login(f):
 			return redirect('/')
 		return f(*args, **kwargs)
 	return decorated_function
+
+def random_string():
+	return ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))

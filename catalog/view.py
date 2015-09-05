@@ -10,6 +10,7 @@ import hashlib
 import requests
 import urllib
 import traceback
+import os
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 
@@ -19,12 +20,15 @@ from oauth_api import oauth_api
 from catalog import models
 from catalog.models.database_setup import Catalog, Base, Item
 
+from flask import current_app as app
+
 view = Blueprint('view', __name__)
 
 @view.context_processor
 def get_catalogs():
 	# login_session['uid'] = 1
 	# login_session['email'] = '233@B.com'
+	# login_session['picture'] = '/static/image/avatar.JPG'
 	return dict(catalogs=models.select_catalogs())
 
 @view.route("/catalogs/<catalog>")
@@ -62,7 +66,10 @@ def new_item(catalog):
 	if request.method == 'POST':
 		c = models.select_catalog(catalog)
 		if c is not None:
-			models.insert_item(login_session['uid'], request.form['name'], c, request.form['description'])
+			image = None
+			if 'image' in request.files:
+				image = store_image(request.files['image'])
+			models.insert_item(login_session['uid'], request.form['name'], c, request.form['description'], image)
 			flash('Successfully created a new item: ' + request.form['name'])
 		else:
 			flash('Catalog does not exist!')
@@ -102,7 +109,10 @@ def edit_item(id):
 			flash('Item does not exist!')
 			return redirect('/')
 		if item.created_user is None or item.created_user == login_session['uid']:
-			models.update_item(item, request.form['name'], request.form['description'])
+			image = None
+			if 'image' in request.files:
+				image = store_image(request.files['image'])
+			models.update_item(item, request.form['name'], request.form['description'], image)
 			flash('Successfully updated item: ' + request.form['name'])
 		else:
 			flash('You are NOT authenticated to edit this item: ' + item.name)
@@ -148,3 +158,14 @@ def del_item(id):
 def main_page():
 	return render_template("index.html", 
 		items=models.select_latest_items())
+
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
+
+
+def store_image(image):
+	if image is None and not allowed_file(image.filename):
+		return None
+	filename = utils.random_string()+'.'+image.filename.rsplit('.', 1)[1]
+	image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+	return '/static/image/' + filename

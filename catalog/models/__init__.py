@@ -30,20 +30,20 @@ def rebuild():
 	cur.execute(open(catalog.app.config["REBUILD_SQL"], 'r').read())
 	conn.commit()
 
-def test():
+def insert_data():
 	"""Neccessary debug data"""
 	Base.metadata.drop_all(engine)
 	Base.metadata.create_all(engine)
-	u1 = insert_user("233@B.com", ":)")
-	u2 = insert_user("fy@B.com", ":(")
+	u1 = insert_user("233@B.com", "/static/image/avatar.JPG")
+	u2 = insert_user("fy@B.com", "/static/image/avatar.JPG")
 	c = insert_catalog(u1.id, "Sichuan Dish")
 	insert_catalog(u1.id, "Fujian Dish")
 	insert_catalog(u1.id, "Guangdong Dish")
 	insert_catalog(u2.id, "Zhejiang Dish")
 	insert_catalog(u2.id, "Beijing Dish")
-	insert_item(u1.id, "Iphone 6 plus", c, 'Is a phone')
-	insert_item(u1.id, "Hot pot", c, "Hot hot hot")
-	insert_item(u2.id, "Kong Bao Chicken", c, "Classic")
+	insert_item(u1.id, "Iphone 6 plus", c, 'Is a phone', None)
+	insert_item(u1.id, "Hot pot", c, "Hot hot hot", None)
+	insert_item(u2.id, "Kong Bao Chicken", c, "Classic", None)
 
 @session_copy_close
 def insert_user(email, picture):
@@ -54,8 +54,8 @@ def insert_user(email, picture):
 	return user
 
 @session_copy_close
-def insert_item(uid, name, c, description):
-	i = Item(name=name, description=description, updated_time=datetime.now(), catalog=c, created_user=uid)
+def insert_item(uid, name, c, description, image):
+	i = Item(name=name, description=description, updated_time=datetime.now(), catalog=c, created_user=uid, image=image)
 	session.add(i)
 	session.commit()
 	session.refresh(i)
@@ -126,9 +126,10 @@ def update_catalog(c, name):
 	session.commit()
 
 @session_copy_close
-def update_item(i, name, description):
+def update_item(i, name, description, image):
 	i.name = name
 	i.description = description
+	i.image = image
 	i.updated_time = datetime.now()
 	session.add(i)
 	session.commit()	

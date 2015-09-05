@@ -21,6 +21,11 @@
 </div>
 <h1 class="text-center">{{ item.name }}</h1>
 <p class="text-info text-center">Updated Time: {{ item.updated_time }}</p>
+{% if item.image %}
+<div class="contianer">
+	<img src="{{ item.image }}" class="item-image img-responsive" alt="Responsive image">
+</div>
+{% endif %}
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">Description</h3>

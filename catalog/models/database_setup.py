@@ -27,7 +27,8 @@ class Item(Base):
 	id = Column(Integer, primary_key=True)
 	name = Column(String(80), nullable=False, unique=True)
 	cid = Column(Integer, ForeignKey('catalogs.id'))
-	description = Column(String(300))
+	description = Column(String(300), nullable=True)
+	image = Column(String(300), nullable=True)
 	updated_time = Column(DateTime, nullable=True)
 	created_user = Column(Integer, ForeignKey('users.id'))
 

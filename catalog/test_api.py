@@ -34,5 +34,6 @@ def test_flash():
 
 @test_api.route("/add_data")
 def add_data():
-	models.test()
-	return "OK"
+	models.insert_data()
+	flash('Add some data to look good!')
+	return redirect('/')
