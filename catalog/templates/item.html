@@ -11,7 +11,10 @@
 			</div>
 			<div class="modal-body">Are you sure to delete {{ item.name }}?</div>
 			<div class="modal-footer">
-				<a href="/items/{{ item.id }}/del" type='button' class="btn btn-primary">CONFIRM</a>
+				<form action='/items/{{ item.id }}/del' method='post'>
+					<input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+					<button type="submit" class="btn btn-primary">CONFIRM</button>
+				</form>
 			</div>
 		</div>
 	</div>

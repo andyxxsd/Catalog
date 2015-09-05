@@ -23,10 +23,8 @@ view = Blueprint('view', __name__)
 
 @view.context_processor
 def get_catalogs():
-	# login_session['uid'] = 1
-	# login_session['email'] = '233@B.com'
-	state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
-	login_session['state'] = state
+	login_session['uid'] = 1
+	login_session['email'] = '233@B.com'
 	return dict(catalogs=models.select_catalogs())
 
 @view.route("/catalogs/<catalog>")
@@ -117,7 +115,7 @@ def edit_item(id):
 		return render_template('edit_item.html',
 			item=models.select_item_by_id(id))
 
-@view.route("/catalogs/<catalog>/del")
+@view.route("/catalogs/<catalog>/del", methods=['POST'])
 @utils.require_login
 def del_catalog(catalog):
 	c = models.select_catalog(catalog)
@@ -131,7 +129,7 @@ def del_catalog(catalog):
 		flash('You are NOT authenticated to delete this catalog: ' + c.name)
 	return redirect('/')
 
-@view.route("/items/<id>/del")
+@view.route("/items/<id>/del", methods=['POST'])
 @utils.require_login
 def del_item(id):
 	item = models.select_item_by_id(id)

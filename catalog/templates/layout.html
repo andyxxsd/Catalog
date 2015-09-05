@@ -141,12 +141,15 @@
 			console.log(authResult)
 			if (authResult['code']) {
 				$('#signinButton').hide();
+				var formData = FormData();
+				formData.append("_csrf_token", "{{ csrf_token() }}");
+				formData.append("code", authResult['code'])
 				$.ajax({
 					type: 'POST',
-					url: '/gconnect?state={{ session.state }}',
+					url: '/gconnect',
 					processData: false,
 					contentType: 'application/octet-stream; charset=utf-8',
-					data: authResult['code'],
+					data: formData,
 					success: function(result) {
 						if (result) {
 							console.log('Login successfully!');

@@ -142,14 +142,3 @@ def delete_catalog(c):
 def delete_item(i):
 	session.delete(i)
 	session.commit()	
-
-
-
-
-
-
-
-
-
-
-

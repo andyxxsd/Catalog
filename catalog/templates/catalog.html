@@ -1,11 +1,28 @@
 {% extends "layout.html" %}
 {% from "display_macro.html" import render_items %}
 {% block body %}
+<div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-modal-title">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="confirm-modal-title">DELETE</h4>
+			</div>
+			<div class="modal-body">Are you sure to delete {{ catelog }}?</div>
+			<div class="modal-footer">
+				<form action='/catalogs/{{ catalog }}/del' method='post'>
+					<input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+					<button type="submit" class="btn btn-primary">CONFIRM</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 <h1 class="text-center">{{ catalog }} items ({{ items|length }} in total).</h1>
 {{ render_items(items) }}
 {% if session.email %}
 <a href="/catalogs/{{ catalog }}/new" type='button' class="btn btn-default">CREATE ITEM</a>
 <a href="/catalogs/{{ catalog }}/edit" type='button' class="btn btn-default">EDIT CATALOG</a>
-<a href="/catalogs/{{ catalog }}/del" type='button' class="btn btn-default">DEL CATALOG</a>
+<button type='button' class="btn btn-default" data-toggle="modal" data-target="#confirm-modal">DEL CATALOG</button>
 {% endif %}
 {% endblock %}

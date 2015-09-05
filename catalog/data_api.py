@@ -50,11 +50,13 @@ def item_json(id):
 # XML API
 @data_api.route('/catalogs.xml')
 def catalogs_xml():
-	return utils.xml_response(utils.list_to_xml('catalogs', [ utils.dict_to_xml('catalog', x.serialize) for x in models.select_catalogs_all() ]), 200)
+	return utils.xml_response(utils.list_to_xml('catalogs',
+		[ utils.dict_to_xml('catalog', x.serialize) for x in models.select_catalogs_all() ]), 200)
 
 @data_api.route('/items.xml')
 def items_xml():
-	return utils.xml_response(utils.list_to_xml('items', [ utils.dict_to_xml('item', x.serialize) for x in models.select_items_all() ]), 200)
+	return utils.xml_response(utils.list_to_xml('items',
+		[ utils.dict_to_xml('item', x.serialize) for x in models.select_items_all() ]), 200)
 
 @data_api.route("/catalogs/<catalog>.xml")
 def catalog_xml(catalog):
