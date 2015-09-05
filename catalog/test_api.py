@@ -10,25 +10,29 @@ import hashlib
 import requests
 import urllib
 import traceback
+import utils
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 
-import catalog.utils
-from view import view
-from test_api import test_api
-from oauth_api import oauth_api
 from catalog import models
 from catalog.models.database_setup import Catalog, Base, Item
 
-app = Flask(__name__)
-app.secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
-app.config.from_pyfile("config.py")
+test_api = Blueprint('test', __name__)
 
-BLUEPRINTS = [
-	(test_api, ''),
-	(view, ''),
-	(oauth_api, ''),
-]
+@test_api.route("/hello")
+def hello():
+	return "Hello World!"
 
-for blueprint, url_prefix in BLUEPRINTS:
-	app.register_blueprint(blueprint, url_prefix=url_prefix)
+@test_api.route("/demo")
+def demo_page():
+	return render_template("index_demo.html")
+
+@test_api.route("/flash")
+def test_flash():
+	flash("YOLO")
+	return render_template("index.html")
+
+@test_api.route("/add_data")
+def add_data():
+	models.test()
+	return "OK"

@@ -1,3 +1,4 @@
+*.db
 client_secrets.json
 # Created by https://www.gitignore.io/api/python,osx
 
