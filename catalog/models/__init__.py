@@ -4,7 +4,7 @@ import subprocess
 from datetime import datetime
 from functools import wraps
 
-from catalog.models.database_setup import Catalog, Base, Item
+from catalog.models.database_setup import Catalog, Base, Item, User
 from sqlalchemy import create_engine, desc, func
 from sqlalchemy.orm import sessionmaker, outerjoin
 
@@ -34,36 +34,49 @@ def test():
 	"""Neccessary debug data"""
 	Base.metadata.drop_all(engine)
 	Base.metadata.create_all(engine)
-	c = insert_catalog("Sichuan Dish")
-	insert_catalog("Fujian Dish")
-	insert_catalog("Guangdong Dish")
-	insert_catalog("Zhejiang Dish")
-	insert_catalog("Beijing Dish")
-	insert_item("Iphone 6 plus", c, 'Is a phone')
-	insert_item("Hot pot", c, "Hot hot hot")
-	insert_item("Kong Bao Chicken", c, "Classic")
+	u1 = insert_user("233@B.com", ":)")
+	u2 = insert_user("fy@B.com", ":(")
+	c = insert_catalog(u1.id, "Sichuan Dish")
+	insert_catalog(u1.id, "Fujian Dish")
+	insert_catalog(u1.id, "Guangdong Dish")
+	insert_catalog(u2.id, "Zhejiang Dish")
+	insert_catalog(u2.id, "Beijing Dish")
+	insert_item(u1.id, "Iphone 6 plus", c, 'Is a phone')
+	insert_item(u1.id, "Hot pot", c, "Hot hot hot")
+	insert_item(u2.id, "Kong Bao Chicken", c, "Classic")
 
 @session_copy_close
-def insert_item(name, c, description):
-	i = Item(name=name, description=description, updated_time=datetime.now(), catalog=c)
+def insert_user(email, picture):
+	user = User(email=email, picture=picture)
+	session.add(user)
+	session.commit()
+	session.refresh(user)
+	return user
+
+@session_copy_close
+def insert_item(uid, name, c, description):
+	i = Item(name=name, description=description, updated_time=datetime.now(), catalog=c, created_user=uid)
 	session.add(i)
 	session.commit()
 	session.refresh(i)
 	return i
 
 @session_copy_close
-def insert_catalog(name):
-	c = Catalog(name=name)
+def insert_catalog(uid, name):
+	c = Catalog(name=name, created_user=uid)
 	session.add(c)
 	session.commit()
 	session.refresh(c)
 	return c
 
 @session_copy_close
-def select_catalog(catalog_name):
-	return session.query(Catalog).filter_by(name=catalog_name).one()
+def select_user_by_email(email):
+	return session.query(User).filter_by(email=email).scalar()
 
-# Working on
+@session_copy_close
+def select_catalog(catalog_name):
+	return session.query(Catalog).filter_by(name=catalog_name).scalar()
+
 @session_copy_close
 def select_catalogs():
 	return session.query(
@@ -74,8 +87,16 @@ def select_catalogs():
 	group_by(Catalog.id).all()
 
 @session_copy_close
+def select_catalogs_all():
+	return session.query(Catalog).all()
+
+@session_copy_close
+def select_items_all():
+	return session.query(Item).all()
+
+@session_copy_close
 def select_item_by_id(id):
-	return session.query(Item).filter_by(id=id).one()
+	return session.query(Item).filter_by(id=id).scalar()
 
 @session_copy_close
 def select_items_by_catalog(c):
@@ -97,6 +118,20 @@ def select_latest_items():
 		Item.updated_time.label('updated_time')
 	).join(Catalog, Catalog.id == Item.cid). \
 	order_by(desc(Item.updated_time)).all()
+
+@session_copy_close
+def update_catalog(c, name):
+	c.name = name
+	session.add(c)
+	session.commit()
+
+@session_copy_close
+def update_item(i, name, description):
+	i.name = name
+	i.description = description
+	i.updated_time = datetime.now()
+	session.add(i)
+	session.commit()	
 
 @session_copy_close
 def delete_catalog(c):

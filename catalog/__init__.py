@@ -17,6 +17,7 @@ import catalog.utils
 from view import view
 from test_api import test_api
 from oauth_api import oauth_api
+from data_api import data_api
 from catalog import models
 from catalog.models.database_setup import Catalog, Base, Item
 
@@ -28,6 +29,7 @@ BLUEPRINTS = [
 	(test_api, ''),
 	(view, ''),
 	(oauth_api, ''),
+	(data_api, ''),
 ]
 
 for blueprint, url_prefix in BLUEPRINTS:

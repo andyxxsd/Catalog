@@ -1,4 +1,4 @@
-import sys
+import json
 
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
@@ -40,7 +40,7 @@ class Item(Base):
 			'id': self.id,
 			'name': self.name,
 			'cid': self.cid,
-			'updated_time': self.updated_time,
+			'updated_time': self.updated_time.__str__(),
 			'created_user': self.created_user,
 		}
 
@@ -61,7 +61,6 @@ class Catalog(Base):
 			'name': self.name,
 			'created_user': self.created_user,	
 		}
-
 
 engine = create_engine('sqlite:///catalog.db')
 Base.metadata.create_all(engine)

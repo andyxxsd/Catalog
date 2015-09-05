@@ -15,7 +15,7 @@ from oauth2client.client import FlowExchangeError
 
 import utils
 from catalog import models
-from catalog.models.database_setup import Catalog, Base, Item
+from catalog.models.database_setup import Catalog, Base, Item, User
 
 oauth_api = Blueprint('oauth_api', __name__)
 
@@ -46,6 +46,11 @@ def gconnect():
 	data = json.loads(answer.text)
 	login_session['picture'] = data['picture']
 	login_session['email'] = data['email']
+
+	user = models.select_user_by_email(login_session['email'])
+	if user is None:
+		user = models.insert_user(login_session['email'], login_session['picture'])
+	login_session['uid'] = user.id
 
 	flash('You are now logged in as %s' % login_session['email'])
 	return utils.json_response(login_session['email'], 200)

@@ -5,6 +5,7 @@
 {{ render_items(items) }}
 {% if session.email %}
 <a href="/catalogs/{{ catalog }}/new" type='button' class="btn btn-default">CREATE ITEM</a>
+<a href="/catalogs/{{ catalog }}/edit" type='button' class="btn btn-default">EDIT CATALOG</a>
 <a href="/catalogs/{{ catalog }}/del" type='button' class="btn btn-default">DEL CATALOG</a>
 {% endif %}
 {% endblock %}
