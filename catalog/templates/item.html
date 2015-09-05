@@ -1,15 +1,30 @@
 {% extends "layout.html" %}
 {% from "display_macro.html" import render_items %}
 {% block body %}
+<!-- Confirm Modal -->
+<div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-modal-title">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="confirm-modal-title">DELETE</h4>
+			</div>
+			<div class="modal-body">Are you sure to delete {{ item.name }}?</div>
+			<div class="modal-footer">
+				<a href="/items/{{ item.id }}/del" type='button' class="btn btn-primary">CONFIRM</a>
+			</div>
+		</div>
+	</div>
+</div>
 <h1 class="text-center">{{ item.name }}</h1>
 <p class="text-info text-center">Updated Time: {{ item.updated_time }}</p>
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Description</h3>
-  </div>
-  <div class="panel-body">{{ item.description }}</div>
+	<div class="panel-heading">
+		<h3 class="panel-title">Description</h3>
+	</div>
+	<div class="panel-body">{{ item.description }}</div>
 </div>
 {% if session.email %}
-<a href="/items/{{ item.id }}/del" type='button' class="btn btn-default">DEL ITEM</a>
+<button type='button' class="btn btn-default" data-toggle="modal" data-target="#confirm-modal">DEL ITEM</button>
 {% endif %}
 {% endblock %}
