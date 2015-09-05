@@ -26,8 +26,13 @@ app = Flask(__name__)
 app.secret_key = utils.random_string()
 app.config.from_pyfile("config.py")
 
+# CSRF Protection
 @app.before_request
 def csrf_protect():
+	'''
+		Check csrf_token for every coming post request.
+		Csrf_token could be in url arguments or inside the post form data.
+	'''
 	if request.method == "POST":
 		token = request.form.get('_csrf_token')
 		if token is None:
@@ -37,6 +42,9 @@ def csrf_protect():
 			abort(403)
 
 def generate_csrf_token():
+	'''
+		Generate a random string as csrf_token
+	'''
 	if '_csrf_token' not in login_session:
 		login_session['_csrf_token'] = utils.random_string()
 	return login_session['_csrf_token']

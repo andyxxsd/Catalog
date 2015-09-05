@@ -21,8 +21,12 @@ oauth_api = Blueprint('oauth_api', __name__)
 
 @oauth_api.route("/gconnect", methods=['POST'])
 def gconnect():
+	'''
+		Google oauth server side login api
+	'''
 	code = request.data
 
+	# Exchange code given by client for access_token
 	try:
 		oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
 		oauth_flow.redirect_uri = 'postmessage'
@@ -45,6 +49,7 @@ def gconnect():
 	login_session['picture'] = data['picture']
 	login_session['email'] = data['email']
 
+	# Check if the user exist
 	user = models.select_user_by_email(login_session['email'])
 	if user is None:
 		user = models.insert_user(login_session['email'], login_session['picture'])
@@ -55,6 +60,9 @@ def gconnect():
 
 @oauth_api.route("/gdisconnect")
 def gdisconnect():
+	'''
+		Google oauth server side logout api
+	'''
 	access_token = login_session.get('access_token')
 	if access_token is None:
 		return utils.json_response("Current user not connected", 401)

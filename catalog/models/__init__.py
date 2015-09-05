@@ -7,6 +7,7 @@ from functools import wraps
 from catalog.models.database_setup import Catalog, Base, Item, User
 from sqlalchemy import create_engine, desc, func
 from sqlalchemy.orm import sessionmaker, outerjoin
+from flask import current_app as app
 
 engine = create_engine('sqlite:///catalog.db')
 Base.metadata.bind = engine
@@ -15,7 +16,10 @@ session = DBsession()
 
 
 def session_copy_close(f):
-	"""Get connection and cursor at the same time"""
+	"""
+		Copy session for each execution.
+		Close session after execution.
+	"""
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
 		session = DBsession()
@@ -24,14 +28,8 @@ def session_copy_close(f):
 		return res 
 	return decorated_function
 
-def rebuild():
-	"""Rebuild the whole database to initial or debug"""
-	conn, cur = connect()
-	cur.execute(open(catalog.app.config["REBUILD_SQL"], 'r').read())
-	conn.commit()
-
 def insert_data():
-	"""Neccessary debug data"""
+	"""Necessary good looking data"""
 	Base.metadata.drop_all(engine)
 	Base.metadata.create_all(engine)
 	u1 = insert_user("233@B.com", "/static/image/avatar.JPG")
@@ -79,6 +77,9 @@ def select_catalog(catalog_name):
 
 @session_copy_close
 def select_catalogs():
+	'''
+		Output id, name and how many items under this catalog.
+	'''
 	return session.query(
 		Catalog.id.label('id'), 
 		Catalog.name.label('name'), 
@@ -100,6 +101,9 @@ def select_item_by_id(id):
 
 @session_copy_close
 def select_items_by_catalog(c):
+	'''
+		Output id, name, name of catalog and updated_time for every items under this catalog.
+	'''
 	return session.query(
 		Item.id.label('id'), 
 		Item.name.label('name'), 
@@ -111,6 +115,10 @@ def select_items_by_catalog(c):
 
 @session_copy_close
 def select_latest_items():
+	'''
+		Output id, name, name of catalog and updated_time for latest items.
+		Of course, it's descending ordered by updated time.
+	'''
 	return session.query(
 		Item.id.label('id'), 
 		Item.name.label('name'), 

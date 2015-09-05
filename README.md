@@ -7,6 +7,7 @@
 	To use Google oauth API, you need to apply for an Google oauth credential.
 	Then download the json file on the detail page.
 	Rename it as: client_secrets.json
+	PS. I left mine.
 
 ##Installation
 
@@ -23,7 +24,7 @@
 
 ##Cleanning
 
-	./applicant.py clean
+	./applicant.py --clean
 
 ##Project Criteria
 

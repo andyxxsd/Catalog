@@ -25,6 +25,11 @@ data_api = Blueprint('data_api', __name__)
 # JSON API
 @data_api.route('/catalogs.json')
 def catalogs_json():
+	'''
+		Since the object is not JSON serializable.
+		We could firstly convert it to a dict.
+		Then a list of dict which is JSON serializable.
+	'''
 	return utils.json_response([ x.serialize for x in models.select_catalogs_all() ], 200)
 
 @data_api.route('/items.json')
@@ -50,6 +55,12 @@ def item_json(id):
 # XML API
 @data_api.route('/catalogs.xml')
 def catalogs_xml():
+	'''
+		Convert list of unserializable object to xml:
+		1. Retrive data
+		2. Turn each object to xml
+		3. Wrap them with a xml tag
+	'''
 	return utils.xml_response(utils.list_to_xml('catalogs',
 		[ utils.dict_to_xml('catalog', x.serialize) for x in models.select_catalogs_all() ]), 200)
 
